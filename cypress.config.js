@@ -7,7 +7,7 @@ module.exports = defineConfig({
     },
     baseUrl: 'https://ui-automation-camp.vercel.app',
     specPattern: 'cypress/e2e/test/**/*.cy.{js,jsx,ts,tsx}',
-    //defaultCommandTimeout: 10000
+    defaultCommandTimeout: 80000,
 
     reporter: 'mochawesome',
     reporterOptions: {

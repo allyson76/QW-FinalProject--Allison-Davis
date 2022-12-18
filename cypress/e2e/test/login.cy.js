@@ -1,5 +1,5 @@
 /// <reference types="cypress"/>
-import Login from '../page/login.page'
+import Auth from '../page/login.page'
 import loginData from '../data/loginData'
 
 describe('Authentication', () => {
@@ -9,30 +9,55 @@ describe('Authentication', () => {
   })
 
   it('should login with valid credentials', () => {
-    // cy.origin("https://dev-mlluudmotpwoldtv.us.auth0.com", { args: {} }, ({ }) => {
-    Login.loginUser(loginData.validuser.email, loginData.validuser.password)
-    // }
-    // )
+    Auth.loginUser(loginData.validuser.email, loginData.validuser.password)
+    cy.url().should('contain', '/products')
   })
 
   it('should login with invalid credentials', () => {
-    Login.loginUser(loginData.invaliduser.email, loginData.invaliduser.password)
+    Auth.loginUser(loginData.invaliduser.email, loginData.invaliduser.password)
     cy.get(Login.errmessage)
       .should('be.visible')
       .and('have.text', loginData.invaliduser.message)
   })
 
-  it('should login with google account', () => {
-    // cy.get(Login.googleBtn).should('be.visible')
-    Login.googleLogin(loginData.googlelogin.email, loginData.googlelogin.password)
+  it("should login with google account", () => {
+    cy.visit("https://ui-automation-camp.vercel.app/");
+    cy.get("#signInOrRegister").click();
+    cy.get("[class='auth0-lock-social-button-text']").click();
+    //Go to google site.
+    cy.origin(
+      "https://accounts.google.com",
+      { args: {} },
+      ({ }) => {
+        cy.get('input[type="email"]').type("davisallison223@gmail.com");
+        cy.get('button[class="VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-k8QpJ VfPpkd-LgbsSe-OWXEXe-dgl2Hf nCP5yc AjY5Oe DuMIQc LQeN7 qIypjc TrZEUc lw1w4b"] div[class="VfPpkd-RLmnJb"]').click({ force: true })
+        cy.get('input[name="password"]').type("Anything1340", { log: false });
+        cy.get('div[id="passwordNext"] span').click();
+      }
+    )
   })
 
-  // it.only('should sign up with valid credentials', () => {
-  //   Login.loginUser(loginData.invaliduser.email, loginData.invaliduser.password)
-  //   cy.get(Login.errmessage)
-  //     .should('be.visible')
-  //     .and('have.text', loginData.invaliduser.message)
-  // })
+  it("should signup with google account", () => {
+    cy.visit("https://ui-automation-camp.vercel.app/");
+    cy.get("#signInOrRegister").click();
+    cy.get('li:nth-child(2)').click()
+    cy.get("[class='auth0-lock-social-button-text']").click();
+    //Go to google site.
+    cy.origin(
+      "https://accounts.google.com",
+      { args: {} },
+      ({ }) => {
+        cy.get('input[type="email"]').type("davisallison223@gmail.com");
+        cy.get('button[class="VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-k8QpJ VfPpkd-LgbsSe-OWXEXe-dgl2Hf nCP5yc AjY5Oe DuMIQc LQeN7 qIypjc TrZEUc lw1w4b"] div[class="VfPpkd-RLmnJb"]').click({ force: true })
+        cy.get('input[name="password"]').type("Anything1340", { log: false });
+        cy.get('div[id="passwordNext"] span').click();
+      }
+    )
+  })
+
+  it.skip('should sign up with valid credentials', () => {
+    Auth.signupUser(loginData.validsignup.email, loginData.validsignup.password)
+  })
 
 
 })
